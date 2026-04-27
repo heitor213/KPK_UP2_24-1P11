@@ -25,27 +25,31 @@ class BaseModel(Model):
 
 class Profile(BaseModel):
     """Профиль пользователя"""
-    id = AutoField(primary_key=True)
+   id = AutoField(primary_key=True)
     first_name = CharField(max_length=100, null=False)
     last_name = CharField(max_length=100, null=False)
     middle_name = CharField(max_length=100, null=True)
-    phone = CharField(max_length=20, unique=True, null=False)
-    email = CharField(max_length=255, unique=True, null=False)
     photo_url = TextField(null=True)
 
     class Meta:
         table_name = "profiles"
 
+class Contact(BaseModel):
+    """Контакты пользователя (телефоны, email)"""
+    id = AutoField(primary_key=True)
+    profile = ForeignKeyField(Profile, backref="contacts", on_delete="CASCADE", null=False)
+    contact_type = CharField(max_length=20, null=False)  # 'phone', 'email'
+    contact_value = CharField(max_length=255, null=False)
+
+    class Meta:
+        table_name = "contacts"
+        indexes = (
+            (('profile', 'contact_type', 'contact_value'), True),  # уникальный индекс
+        )
 
 class NotificationSetting(BaseModel):
     """Настройки уведомлений"""
-    profile = ForeignKeyField(
-        Profile,
-        backref="notification",
-        unique=True,
-        on_delete="CASCADE",
-        null=False
-    )
+    profile = ForeignKeyField(Profile, backref="notification", unique=True, on_delete="CASCADE", null=False)
     phone_notification = BooleanField(default=True)
     email_notification = BooleanField(default=True)
 
@@ -56,7 +60,7 @@ class NotificationSetting(BaseModel):
 def init_db():
     """Инициализация базы данных"""
     db.connect()
-    db.create_tables([Profile, NotificationSetting], safe=True)
+    db.create_tables([Profile, Contact, NotificationSetting], safe=True)
     db.close()
 
 
