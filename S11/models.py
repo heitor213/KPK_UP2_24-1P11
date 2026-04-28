@@ -31,12 +31,10 @@ class Discipline(BaseModel):
     - id: первичный ключ, автоинкремент
     - name: название дисциплины (уникальное, обязательное)
     - code: код дисциплины (уникальный, обязательный)
-    - description: описание дисциплины (обязательное, по умолчанию пустая строка)
     """
     id = IntegerField(primary_key=True)
     name = CharField(max_length=255, unique=True, null=False)
     code = CharField(max_length=50, unique=True, null=False)
-    description = TextField(null=False, default="")
 
     class Meta:
         table_name = "discipline"
