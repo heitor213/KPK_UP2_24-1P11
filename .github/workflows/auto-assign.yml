@@ -14,6 +14,4 @@ jobs:
           reviewers: |
             Bormerd
             VeraMol06
-            YuriSilenok
-          # Количество ревьюверов, которых нужно назначить (0 = назначить всех из списка)
           numberOfReviewers: 1
