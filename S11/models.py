@@ -28,13 +28,15 @@ class Discipline(BaseModel):
    # Модель дисциплины.
 
     id = IntegerField(primary_key=True)
-    name = CharField(max_length=255, unique=True, null=False)
+    name = CharField(max_length=255, null=False)
     code = CharField(max_length=50, unique=True, null=False)
-    specialty_id = IntegerField(unique=True, null=False)
+    specialty_id = IntegerField(null=False)
 
     class Meta:
         table_name = "discipline"
-
+        indexes = (
+            (('name', 'code', 'specialty_id'), True),
+        )
 
 def initialize_database():
     """
@@ -43,7 +45,7 @@ def initialize_database():
     Безопасна для многократного вызова.
     """
     db.connect()
-    db.create_tables([Discipline], safe=True)
+    db.create_tables([Discipline])
     print(f"База данных инициализирована: {DB_PATH}")
     print(f"Таблицы созданы: Discipline")
     db.close()
@@ -55,3 +57,4 @@ if __name__ == "__main__":
     Запуск: python models.py
     """
     initialize_database()
+    print("DA")
