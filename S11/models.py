@@ -5,6 +5,7 @@ from peewee import (
     IntegerField,
     CharField,
     TextField,
+    ForeignKeyField,
 )
 
 # Путь к файлу БД
@@ -28,9 +29,9 @@ class Discipline(BaseModel):
    # Модель дисциплины.
 
     id = IntegerField(primary_key=True)
-    name = CharField(max_length=255, null=False)
+    name = CharField(max_length=255,unique=True, null=False)
     code = CharField(max_length=50, unique=True, null=False)
-    specialty_id = IntegerField(null=False)
+    specialty_id = ForeignKeyField(null=False)
 
     class Meta:
         table_name = "discipline"
